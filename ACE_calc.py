@@ -15,10 +15,8 @@ with open(file_name, newline='') as ATCF_file:
     line_writer = csv.writer(out_file, delimiter=',', quotechar='|')
     current_storm = None
     ACE = 0
-    transitioned = False
     for line in line_reader:
         if len(line) == 4:
-            transitioned = False
             # Finished with this storm? Commit it to the file.
             if current_storm != None:
                 current_storm.append(str(ACE/10000))
@@ -26,9 +24,7 @@ with open(file_name, newline='') as ATCF_file:
             current_storm = line[:2]
             print("Processing " + str(current_storm))
             ACE = 0
-        elif line[2].strip() == 'T':
-            transitioned = not transitioned
-        elif (not transitioned) and int(line[1]) % 600 == 0 and int(line[6]) >= 34 and line[3].strip() != 'EX' and line[3].strip() != 'LO' and line[3].strip() != 'DB': # Only count 6-hourly intervals at TS strength
+        elif int(line[1]) % 600 == 0 and int(line[6]) >= 34 and line[3].strip() != 'EX' and line[3].strip() != 'LO' and line[3].strip() != 'DB': # Only count 6-hourly intervals at TS strength
             ACE += int(line[6])**2
     # Last storm
     current_storm.append(str(ACE/10000))
