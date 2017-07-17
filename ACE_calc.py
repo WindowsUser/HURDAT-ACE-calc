@@ -24,7 +24,7 @@ with open(file_name, newline='') as ATCF_file:
             current_storm = line[:2]
             print("Processing " + str(current_storm))
             ACE = 0
-        elif int(line[1]) % 600 == 0: # Only count 6-hourly intervals
+        elif int(line[1]) % 600 == 0 and int(line[6]) >= 34: # Only count 6-hourly intervals at TS strength
             ACE += int(line[6])**2
     # Last storm
     current_storm.append(str(ACE/10000))
